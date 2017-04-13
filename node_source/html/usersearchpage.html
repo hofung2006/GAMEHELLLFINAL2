@@ -1,0 +1,676 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Game Hell</title>
+<style type="text/css">
+<!--
+
+
+img {
+    display: none;
+}
+
+
+img[src] {
+   display: block;
+ }
+
+.style1 {color: #3399CC}
+/*set style of GameHell Title*/
+.style2 {
+	font-size: 90px;
+	font-family: Algerian, serif, monospace;
+	color: #FFFFFF;
+	text-shadow: 10px 5px #762E7D;
+}
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+button {
+    background-color: black;
+    color: white;
+    padding: 20px 20px;
+    margin: 2px 0;
+    border: none;
+    cursor: pointer;
+	border-radius: 12px;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #FFFFFF;
+	color: black;
+    opacity: 0.8;
+}
+.button2 {
+    background-color: black;
+    color: white;
+    padding: 10px 18px;
+    margin: 2px 0;
+    border: none;
+    cursor: pointer;
+	border-radius: 12px;
+    width: auto;
+}
+
+.button2:hover {
+    background-color: #FFFFFF;
+	color: black;
+    opacity: 0.8;
+}
+/* Extra styles for the cancel button */
+.cancelbtn {
+    width: auto;
+    padding: 10px 18px;
+    background-color: #f44336;
+}
+
+/* Center the image and position the close button */
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+    position: relative;
+}
+
+img.avatar {
+    width: 40%;
+    border-radius: 50%;
+}
+
+.container {
+    padding: 16px;
+}
+
+span.psw {
+    float: right;
+    padding-top: 16px;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+.close {
+    position: absolute;
+    right: 25px;
+    top: 0;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: red;
+    cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+    from {-webkit-transform: scale(0)} 
+    to {-webkit-transform: scale(1)}
+}
+    
+@keyframes animatezoom {
+    from {transform: scale(0)} 
+    to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+    span.psw {
+       display: block;
+       float: none;
+    }
+    .cancelbtn {
+       width: 100%;
+    }
+}
+body {
+	background-color: #3E3C3C;
+}
+.style4 {font-size: 50px; color: #CCCCCC; }
+.style5 {
+	font-size: 40px;
+	color: #CCCCCC;
+}
+#heading{
+background-color: black;
+}
+.sign{
+	font-size: 20px;
+}
+h1{color:#ff99ff}
+p {color:#99ccff}
+
+.pagebutton {
+    background-color: black;
+    color: white;
+    padding: 10px 18px;
+    margin: 2px 0;
+    border: none;
+    cursor: pointer;
+	border-radius: 12px;
+    width: 10%;
+}
+
+-->
+</style>
+<script>
+function createCookie(name,value,days) {
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime()+(days*24*60*60*1000));
+		var expires = "; expires="+date.toGMTString();
+	}
+	else var expires = "";
+	document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i < ca.length;i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return null;
+}
+
+function eraseCookie(name) {
+	createCookie(name,"",-1);
+}
+
+function logout(){
+
+    $.ajax({
+           type: "POST",
+           url: "/logout",
+           data: {user_id: readCookie("user_id")}, // serializes the form's elements.
+   
+         });
+		 
+	top.location='home.html';
+	eraseCookie("user_name");
+	eraseCookie("user_id");
+
+}
+
+function validPost(){
+	var price=document.forms["productform"]["price"].value;
+	var priceRegex=/^[0-9]*([.][1-9])?$/;
+	if (!(priceRegex.test(price))){
+		alert("The price is not valid");
+		return false;
+	}
+}
+function validGame(){
+	var platforms=document.getElementsByName("platform");
+    var okay=false;
+    for(var i=0,l=platforms.length;i<l;i++)
+    {
+        if(platforms[i].checked)
+        {
+            okay=true;
+            break;
+        }
+    }
+	
+    if(!(okay)){
+		alert("At least one platform should be chosen");
+		return;
+	}
+
+}
+</script>
+</head>
+
+<body>
+<table id="heading" width="100%" border="0">
+  <tr>
+    <th width="9%" height="108" rowspan="2" scope="col"><img src="img/gamehell.jpg" width="199" height="148" /></th>
+    <th onclick="self.location='userhome.html'" width="69%" rowspan="2" scope="col"><span class="style2">GAME HELL </span></th>
+    <th width="6%" height="63" scope="col">&nbsp;</th>
+    <th width="8%" scope="col"><span class="style7"><a href="person_info_menu.html" target="main"><p id=username>Username</p></a></span></th>
+    <th width="8%" scope="col"><button class="logout" style="width:auto; max-height:100%;" onclick="logout()">Log Out </button> </th>
+  </tr>
+  <tr>
+  
+    <th colspan="3" scope="col"><form id="searchform" name="form1" >
+        
+         <input type="text" name="searchname" placeholder="search" list="gamelist" autocomplete="off" />
+		 <datalist id="gamelist"> </datalist>
+        
+		<button type="submit" >submit</button>
+      </form>
+    </th>
+	</th>
+<th width="8%" scope="col"><button class="sign" onclick="document.getElementById('pro01').style.display='block'" style="width:auto;"> Post Product </button> </th>
+<th width="8%" scope="col"><button class="sign" onclick="document.getElementById('reggame').style.display='block'" style="width:auto;"> Register Game </button> </th>
+  </tr>
+</table>
+<table width="100%" border="0" id="proinfo">
+	<th><font size="20" color="red">Search Result:</font></th>
+ </table>
+ 
+<table width="100%" border="0">
+  <tr>
+  </tr>
+  <tr>
+    <td width="23%"><div align="center"><img id="new0" width="180" height="180" /><p id="name0"></p><p id="price0"></p><p id="platform0"></p></div></td>
+    <td width="23%"><div align="center"><img id="new1" width="180" height="180" /><p id="name1"></p><p id="price1"></p><p id="platform1"></p></div></div></td>
+    <td width="23%"><div align="center"><img id="new2" width="180" height="180" /><p id="name2"></p><p id="price2"></p><p id="platform2"></p></div></div></td>
+	<td width="23%"><div align="center"><img id="new3" width="180" height="180" /><p id="name3"></p><p id="price3"></p><p id="platform3"></p></div></div></td>
+  </tr>
+</table>
+<table width="100%" border="0">
+  <tr>
+  </tr>
+  <tr>
+    <td width="23%"><div align="center"><img id="new4" width="180" height="180" /><p id="name4"></p><p id="price4"></p><p id="platform4"></p></div></div></td>
+    <td width="23%"><div align="center"><img id="new5" width="180" height="180" /><p id="name5"></p><p id="price5"></p><p id="platform5"></p></div></div></td>
+    <td width="23%"><div align="center"><img id="new6" width="180" height="180" /><p id="name6"></p><p id="price6"></p><p id="platform6"></p></div></div></td>
+	<td width="23%"><div align="center"><img id="new7" width="180" height="180" /><p id="name7"></p><p id="price7"></p><p id="platform7"></p></div></div></td>
+  </tr>
+</table>
+<table width="100%" border="0">
+  <tr>
+  </tr>
+  <tr>
+    <td width="23%"><div align="center"><img id="new8" width="180" height="180" /><p id="name8"></p><p id="price8"></p><p id="platform8"></p></div></div></td>
+    <td width="23%"><div align="center"><img id="new9" width="180" height="180" /><p id="name9"></p><p id="price9"></p><p id="platform9"></p></div></div></td>
+    <td width="23%"><div align="center"><img id="new10" width="180" height="180" /><p id="name10"></p><p id="price10"></p><p id="platform10"></p></div></div></td>
+	<td width="23%"><div align="center"><img id="new11" width="180" height="180" /><p id="name11"></p><p id="price11"></p><p id="platform11"></p></div></div></td>
+  </tr>
+  
+</table>
+<div id="pageboxes"></div>
+<div id="pro01" class="modal">
+  
+  <form class="modal-content animate" id="productform">
+	<div class="imgcontainer">
+      
+	  <span onclick="document.getElementById('pro01').style.display='none'" class="close" title="Close Modal">&times;</span>
+    </div>
+    <div class="container">
+      <label><b>Product Name </b></label>
+      <input type="text" placeholder="Enter Product Name " name="product_name" list="gamelist" autocomplete="off" required>
+	  <datalist id="gamelist"> </datalist>
+
+      <label><b>Price </b></label>
+      <input type="text" placeholder="Enter Price" name="price" autocomplete="off" required>
+	  
+	  <label><b>Second-hand </b></label>
+      <input type="radio" name="secondhand" value ="yes" checked required>Yes 
+	  <input type="radio" name="secondhand" value ="no">NO </br></br>
+	  
+	  <label><b>Platform </b></label></br>
+	  <input type="radio" name="platform" value ="ps3">PS3 </br>
+	  <input type="radio" name="platform" value ="ps4">PS4 </br>
+	  <input type="radio" name="platform" value ="psp">PSP </br>
+	  <input type="radio" name="platform" value ="wii">WII </br>
+	  <input type="radio" name="platform" value ="xbox">XBOX1 </br>
+	  <input type="radio" name="platform" value ="xbox360">XBOX360 </br>
+	  <input type="radio" name="platform" value ="nds">NDS </br>
+	  <input type="radio" name="platform" value ="3ds">3DS </br>
+	  <input type="radio" name="platform" value ="pc">PC </br></br>
+	  
+	  <label><b>Venue</b></label>
+      <input type="text" placeholder="Enter Venue" name="venue" required>    
+
+      <label><b>Image Link</b></label>
+      <input type="text" placeholder="Enter Image Link" name="imagelink" autocomplete="off" required>
+
+      <label><b>Information about product</b></label>
+      <input type="text" placeholder="Enter Information about product" name="pinfo" autocomplete="off" required>
+	  	  
+      <button type="submit" onclick="return validPost()">Post Product</button>
+    </div>
+
+    <div class="container" style="background-color:#f1f1f1">
+      <button type="button" onclick="document.getElementById('pro01').style.display='none'" class="cancelbtn">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<div id="reggame" class="modal">
+  
+  <form class="modal-content animate" id="gameform" >
+	<div class="imgcontainer">
+      
+	  <span onclick="document.getElementById('reggame').style.display='none'" class="close" title="Close Modal">&times;</span>
+    </div>
+    <div class="container">
+      <label><b>Product Name </b></label>
+      <input type="text" placeholder="Enter Product Name " name="product_name"  id="productname" required>
+	  
+    
+      <label><b>Author</b></label>
+      <input type="text" placeholder="Enter Author" name="author" required>
+
+      <label><b>Image Link</b></label>
+      <input type="text" placeholder="Enter Image Link" name="imagelink" required>
+
+      <label><b>Information about product</b></label>
+      <input type="text" placeholder="Enter Information about product" name="pinfo" required>
+	  
+	  <label><b>Release Date </b></label>
+	  <input type="date"  name="releaseDate" required max="2017-04-12" min="1990-01-01"></br></br>
+	  
+	  <label><b>Categories </b></label></br>
+	  <input type="radio" name="categories" value ="action" required>Action </br>
+	  <input type="radio" name="categories" value ="adventure">Adventure </br>
+	  <input type="radio" name="categories" value ="casual">Casual </br>
+	  <input type="radio" name="categories" value ="indie">Indie </br>
+	  <input type="radio" name="categories" value ="massivelyMultiplayer">Massively Multiplayer </br>
+	  <input type="radio" name="categories" value ="music">Music </br>
+	  <input type="radio" name="categories" value ="racing">Racing </br>
+	  <input type="radio" name="categories" value ="rpg">RPG </br>
+	  <input type="radio" name="categories" value ="simulation">Simulation </br>
+	  <input type="radio" name="categories" value ="sports">Sports </br>
+	  <input type="radio" name="categories" value ="strategy">Strategy </br></br>
+	  
+	  
+	  <label><b>Platform </b></label></br>
+	  <input type="checkbox" name="platform" value ="ps3">PS3 </br>
+	  <input type="checkbox" name="platform" value ="ps4">PS4 </br>
+	  <input type="checkbox" name="platform" value ="psp">PSP </br>
+	  <input type="checkbox" name="platform" value ="wii">WII </br>
+	  <input type="checkbox" name="platform" value ="xbox">XBOX1 </br>
+	  <input type="checkbox" name="platform" value ="xbox360">XBOX360 </br>
+	  <input type="checkbox" name="platform" value ="nds">NDS </br>
+	  <input type="checkbox" name="platform" value ="3ds">3DS </br>
+	  <input type="checkbox" name="platform" value ="pc">PC </br>
+	  
+
+      <button type="submit" onclick="return validGame()">Register Game</button>
+    </div>
+
+    <div class="container" style="background-color:#f1f1f1">
+      <button type="button" onclick="document.getElementById('reggame').style.display='none'" class="cancelbtn">Cancel</button>
+    </div>
+  </form>
+</div>
+<div id="postsucess" class="modal">
+  
+  <form class="modal-content animate" action="/action_page.php">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('postsucess').style.display='none'" class="close" title="Close Modal">&times;</span>
+
+    </div>
+
+    <div class="container">
+      <p id="signup"> Post sucessfully</p>
+      <button type="button" onclick="self.location='userhome.html'" >back</button>
+    </div>
+  </form>
+</div>
+<div id="post2game" class="modal">
+  
+  <form class="modal-content animate" action="/action_page.php">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('post2game').style.display='none'" class="close" title="Close Modal">&times;</span>
+
+    </div>
+
+    <div class="container">
+      <p id="signup"> The game is not registered or not be validated. Would you like to register the game first?</p>
+      <button type="button" onclick="document.getElementById('post2game').style.display='none';document.getElementById('reggame').style.display='block';document.getElementById('gameform').reset();document.getElementById('productname').value=document.forms['productform']['product_name'].value">Register the Game</button>
+    </div>
+  </form>
+</div>
+<div id="postsucess" class="modal">
+  
+  <form class="modal-content animate" action="/action_page.php">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('postsucess').style.display='none'" class="close" title="Close Modal">&times;</span>
+
+    </div>
+
+    <div class="container">
+      <p id="signup"> Post sucessfully</p>
+      <button type="button" onclick="self.location='userhome.html'" >back</button>
+    </div>
+  </form>
+</div>
+<div id="regsucess" class="modal">
+  
+  <form class="modal-content animate" action="/action_page.php">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('regsucess').style.display='none'" class="close" title="Close Modal">&times;</span>
+
+    </div>
+
+    <div class="container">
+      <p id="signup">The game will be validated by our admins</p>
+      <button type="button" onclick="self.location='userhome.html'" >Back</button>
+    </div>
+  </form>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+var searchname;
+var proimg=document.getElementById('pageboxes');
+getproducts();
+function getproducts(){
+var url=window.location.href ;
+var queryStart = url.indexOf("?") + 1;
+var queryEnd = url.length + 1;
+var query = url.slice(queryStart, queryEnd - 1);
+var htmlid;
+
+$.ajax({
+  type: "POST",
+  url: '/getproducts',
+  data: query,
+  success: function(data){
+  if ((data!=2)&&(data!=0)){
+  searchname=data[0].searchname;
+  for (i=0;i<data.length;i++){
+  var productlink="/userproduct.html?product_id="+data[i].product_id;
+  var a =document.createElement('a');
+  a.href=productlink;
+  htmlid='new'+i;
+  document.getElementById(htmlid).src=data[i].image_link;
+  htmlid="#"+htmlid;
+  $(htmlid).wrap(a);
+  htmlid='name'+i;
+  document.getElementById(htmlid).innerHTML=data[i].product_name;
+  htmlid="#"+htmlid;
+  $(htmlid).wrap(a);
+  htmlid='price'+i;
+  document.getElementById(htmlid).innerHTML='$'+data[i].price;
+  htmlid='platform'+i;
+  document.getElementById(htmlid).innerHTML=data[i].platform;
+  
+
+  }
+  var pages=data[0].count;
+  var pageno=Math.ceil(pages/12);
+  var j;
+  var pageurl1="/usersearchpage.html?searchname=";
+  var pageurl2="&page=";
+
+	for (j=1;j<=pageno;j++){
+		var pageurl=pageurl1+data[0].searchname+pageurl2+j;
+		var a =document.createElement('a');
+		a.href=pageurl;
+		var button = document.createElement('button');
+		var nodebutton=document.createTextNode(j);
+		button.appendChild(nodebutton);
+		button.setAttribute("id","pagebutton"); 
+		button.setAttribute("class","pagebutton");
+		button.value=j;
+		proimg.appendChild(button);
+		$(button).wrap(a);
+	}
+  }
+}
+});
+
+}
+
+$("#productform").submit(function(e) {
+
+    var url = "/postproduct"; // the script where you handle the form input.
+
+	var data =$("#productform").serialize()+'&user_id='+readCookie("user_id");
+	//alert(data);
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: data, // serializes the form's elements.
+	        success: function(data){
+				if (data==1){
+					document.getElementById('pro01').style.display='none';
+					document.getElementById('postsucess').style.display='block';
+				} else if(data==2){
+					document.getElementById('pro01').style.display='none';
+					document.getElementById('post2game').style.display='block';
+					
+				}	else {
+					alert("Failed to post");
+				}			
+      },
+      error: function(jqXHR, textStatus, errorThrown){
+          alert('error'+jqXHR+'123'+textStatus+'123'+errorThrown);
+      } 	   
+         });
+
+   e.preventDefault(); // avoid to execute the actual submit of the form.
+});
+
+$("#gameform").submit(function(e) {
+
+    var url = "/registergame"; // the script where you handle the form input.
+
+	//alert(data);
+    $.ajax({
+           type: "POST",
+           url: url,
+           data: $("#gameform").serialize(), // serializes the form's elements.
+	        success: function(data){
+				if (data==1){
+					document.getElementById('reggame').style.display='none';
+					document.getElementById('regsucess').style.display='block';
+				} else if(data==2){
+					alert("This game has already been registered");
+					
+				}	else {
+					alert("Failed to register");
+				}
+
+
+				
+      },
+      error: function(jqXHR, textStatus, errorThrown){
+          alert('error'+jqXHR+'123'+textStatus+'123'+errorThrown);
+      } 	   
+         });
+
+   e.preventDefault(); // avoid to execute the actual submit of the form.
+});
+
+var gamelist = document.getElementById('gamelist');
+searchgame("");
+function searchgame(game_name){
+$.ajax({
+  type: "POST",
+  url: '/searchgame',
+  data: {game_name: game_name},
+  success: function(data){
+    var i;
+	for (i=0;i<data.length;i++){
+		 var option = document.createElement('option');
+		  option.value = data[i].game_name;
+		  gamelist.appendChild(option);
+ }
+ 
+  
+  }
+
+});
+
+}
+
+
+
+
+
+
+
+
+$("#searchform").submit(function(e) {
+	//alert($("#searchform").serialize());
+    var url = "/usersearchpage.html?"; // the script where you handle the form input.
+	window.location.href=url+$("#searchform").serialize()+'&page=1';
+  // serializes the form's elements.
+  
+
+
+   e.preventDefault(); // avoid to execute the actual submit of the form.
+});
+
+// Get the modal
+var modal1 = document.getElementById('pro01');
+var modal2 = document.getElementById('reggame');
+var modal3 = document.getElementById('postsucess');
+var modal4 = document.getElementById('regsucess');
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if ((event.target == modal1)||(event.target == modal2)||(event.target == modal3)||(event.target == modal4))  {
+        modal1.style.display = "none";
+		modal2.style.display = "none";
+		modal3.style.display = "none";
+		modal4.style.display = "none";
+    }
+}
+</script>
+<script>
+	window.onload = function() {
+		if (readCookie("user_name")==null){
+			top.location='home.html';
+		}
+		document.getElementById("username").innerHTML =readCookie("user_name");
+		document.getElementById("username").style.fontSize = "xx-large";
+		document.getElementById("username").style.color = "magenta";
+		
+}
+</script>
+</body>
+</html>

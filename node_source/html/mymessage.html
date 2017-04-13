@@ -1,0 +1,294 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Game Hell</title>
+<style type="text/css">
+
+<!--
+.style1 {color: #3399CC}
+/*set style of GameHell Title*/
+.style2 {
+	font-size: 90px;
+	font-family: Algerian, serif, monospace;
+	color: #FFFFFF;
+	text-shadow: 10px 5px #762E7D;
+}
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+button {
+    background-color: black;
+    color: white;
+    padding: 20px 20px;
+    margin: 2px 0;
+    border: none;
+    cursor: pointer;
+	border-radius: 12px;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #FFFFFF;
+	color: black;
+    opacity: 0.8;
+}
+.button2 {
+    background-color: black;
+    color: white;
+    padding: 10px 18px;
+    margin: 2px 0;
+    border: none;
+    cursor: pointer;
+	border-radius: 12px;
+    width: auto;
+}
+
+.button2:hover {
+    background-color: #FFFFFF;
+	color: black;
+    opacity: 0.8;
+}
+/* Extra styles for the cancel button */
+.cancelbtn {
+    width: auto;
+    padding: 10px 18px;
+    background-color: #f44336;
+}
+
+/* Center the image and position the close button */
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+    position: relative;
+}
+
+img.avatar {
+    width: 40%;
+    border-radius: 50%;
+}
+
+.container {
+    padding: 16px;
+}
+
+span.psw {
+    float: right;
+    padding-top: 16px;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+.close {
+    position: absolute;
+    right: 25px;
+    top: 0;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: red;
+    cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+    from {-webkit-transform: scale(0)} 
+    to {-webkit-transform: scale(1)}
+}
+    
+@keyframes animatezoom {
+    from {transform: scale(0)} 
+    to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+    span.psw {
+       display: block;
+       float: none;
+    }
+    .cancelbtn {
+       width: 100%;
+    }
+}
+body {
+	background-color: #3E3C3C;
+}
+.style4 {font-size: 50px; color: #CCCCCC; }
+.style5 {
+	font-size: 40px;
+	color: #CCCCCC;
+}
+#heading{
+background-color: black;
+}
+.sign{
+	font-size: 20px;
+}
+.mylabel {
+    font: normal 20px courier !important;
+}
+-->
+</style>
+<script>
+function createCookie(name,value,days) {
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime()+(days*24*60*60*1000));
+		var expires = "; expires="+date.toGMTString();
+	}
+	else var expires = "";
+	document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i < ca.length;i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return null;
+}
+
+function eraseCookie(name) {
+	createCookie(name,"",-1);
+}
+function logout(){
+
+    $.ajax({
+           type: "POST",
+           url: "/logout",
+           data: {user_id: readCookie("user_id")}, // serializes the form's elements.
+   
+         });
+		 
+	top.location='home.html';
+	eraseCookie("user_name");
+	eraseCookie("user_id");
+
+}
+
+
+
+</script>
+</head>
+
+<body>
+<table id="heading" width="100%" border="0">
+  <tr>
+    <th width="9%" height="108" rowspan="2" scope="col"><img src="img/gamehell.jpg" width="199" height="148" /></th>
+    <th onclick="self.location='userhome.html'" width="69%" rowspan="2" scope="col"><span class="style2">GAME HELL </span></th>
+    <th width="6%" height="63" scope="col">&nbsp;</th>
+    <th width="8%" scope="col"><span class="style7"><a href="person_info_menu.html" target="main"><p id="username">Username</p></a></span></th>
+    <th width="8%" scope="col"><button class="logout" style="width:auto; max-height:100%;" onclick="logout()">Log Out </button> </th>
+  </tr>
+</table>
+<div id="mycomment"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+getmessage();
+function getmessage(){
+
+
+$.ajax({
+  type: "POST",
+  url: '/getmessage',
+  data: {user_id:readCookie("user_id")},
+  success: function(data){
+	var c=document.getElementById("mycomment");
+	var i;
+	for (i=0;i<data.length;i++){
+		if (readCookie("user_name")==data[i].sender_name){
+		var label=document.createElement("label");
+		var strdate=data[i].date;
+		var date=strdate.substring(0,10);
+		var a=document.createElement("a");
+		userurl="/userpublic_info_menu.html?user_id="+data[i].reciever_id ;
+		a.href=userurl;
+		label.innerHTML = date+ " To: " +data[i].reciever_name ;
+		label.style.color="magenta ";
+		label.style.fontSize = "25px";
+		c.append(label);
+		$(label).wrap(a);
+		}else{
+		var label=document.createElement("label");
+		var strdate=data[i].date;
+		var date=strdate.substring(0,10);
+		var a=document.createElement("a");
+		userurl="/userpublic_info_menu.html?user_id="+data[i].sender_id ;
+		a.href=userurl;
+		label.innerHTML = date+ " From: " +data[i].sender_name ;
+		label.style.color="magenta";
+		label.style.fontSize = "25px";
+		c.append(label);
+		$(label).wrap(a);
+		}
+		var br=document.createElement("br");
+		c.append(br);
+		var alabel=document.createElement("label");
+		alabel.innerHTML = data[i].message;
+		alabel.style.color="grey";
+		alabel.style.fontSize = "35px";
+		c.append(alabel);
+		var br2=document.createElement("br");
+		c.append(br2);
+	}
+ }
+});
+}
+
+
+	window.onload = function() {
+		if (readCookie("user_name")==null){
+			top.location='home.html';
+		}
+		document.getElementById("username").innerHTML =readCookie("user_name");
+		document.getElementById("username").style.fontSize = "xx-large";
+		document.getElementById("username").style.color = "magenta";
+		
+}
+</script>
+
+</body>
+</html>

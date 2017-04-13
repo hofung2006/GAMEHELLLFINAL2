@@ -1,0 +1,364 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Game Hell</title>
+<style type="text/css">
+<!--
+.style1 {color: #3399CC}
+/*set style of GameHell Title*/
+.style2 {
+	font-size: 90px;
+	font-family: Algerian, serif, monospace;
+	color: #FFFFFF;
+	text-shadow: 10px 5px #762E7D;
+}
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+button {
+    background-color: black;
+    color: white;
+    padding: 20px 20px;
+    margin: 2px 0;
+    border: none;
+    cursor: pointer;
+	border-radius: 12px;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #FFFFFF;
+	color: black;
+    opacity: 0.8;
+}
+.button2 {
+    background-color: black;
+    color: white;
+    padding: 10px 18px;
+    margin: 2px 0;
+    border: none;
+    cursor: pointer;
+	border-radius: 12px;
+    width: auto;
+}
+
+.button2:hover {
+    background-color: #FFFFFF;
+	color: black;
+    opacity: 0.8;
+}
+/* Extra styles for the cancel button */
+.cancelbtn {
+    width: auto;
+    padding: 10px 18px;
+    background-color: #f44336;
+}
+
+/* Center the image and position the close button */
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+    position: relative;
+}
+
+img.avatar {
+    width: 40%;
+    border-radius: 50%;
+}
+
+.container {
+    padding: 16px;
+}
+
+span.psw {
+    float: right;
+    padding-top: 16px;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+.close {
+    position: absolute;
+    right: 25px;
+    top: 0;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: red;
+    cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+    from {-webkit-transform: scale(0)} 
+    to {-webkit-transform: scale(1)}
+}
+    
+@keyframes animatezoom {
+    from {transform: scale(0)} 
+    to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+    span.psw {
+       display: block;
+       float: none;
+    }
+    .cancelbtn {
+       width: 100%;
+    }
+}
+body {
+	background-color: #3E3C3C;
+}
+.style4 {font-size: 50px; color: #CCCCCC; }
+.style5 {
+	font-size: 40px;
+	color: #CCCCCC;
+}
+#heading{
+background-color: black;
+}
+.sign{
+	font-size: 20px;
+}
+-->
+</style>
+<script>
+function createCookie(name,value,days) {
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime()+(days*24*60*60*1000));
+		var expires = "; expires="+date.toGMTString();
+	}
+	else var expires = "";
+	document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i < ca.length;i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return null;
+}
+
+function eraseCookie(name) {
+	createCookie(name,"",-1);
+}
+function logout(){
+	top.location='home.html';
+	eraseCookie("user_name");
+	eraseCookie("user_id");
+}
+
+function validPost(){
+	var price=document.forms["productform"]["price"].value;
+	var priceRegex=/^[0-9]*([.][1-9])?$/;
+	if (!(priceRegex.test(price))){
+		alert("The price is not valid");
+		return false;
+	}
+}
+function validGame(){
+	var platforms=document.getElementsByName("platform");
+    var okay=false;
+    for(var i=0,l=platforms.length;i<l;i++)
+    {
+        if(platforms[i].checked)
+        {
+            okay=true;
+            break;
+        }
+    }
+	
+    if(!(okay)){
+		alert("At least one platform should be chosen");
+		return;
+	}
+
+}
+
+function validateForm() {
+  var opassword = document.forms["changeinfo"]["opsw"].value;
+  var password = document.forms["changeinfo"]["psw"].value;
+  var password2 = document.forms["changeinfo"]["psw2"].value;
+  var phone = document.forms["changeinfo"]["utel"].value;
+  var email= document.forms["changeinfo"]["uemail"].value;
+
+  if(password=="" && phone=="" && email==""){
+	alert('Please change at least one information');
+	return false;
+  
+  }
+  
+  
+  var emailRegex=/^(((([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})))|[\s]*)$/;
+  var passwordRegex=/^[a-zA-Z0-9]*$/;
+  var phoneRegex=/^([0-9]{8}|[\s]*)$/;
+  
+  
+
+  if (!(passwordRegex.test(password))){
+    alert("Password is not valid");return false;
+  }
+
+
+  if (!(phoneRegex.test(phone))){
+    alert("Phone number is not valid");return false;
+  }
+
+  if (!(emailRegex.test(email))){
+    alert("Email is not valid");return false;
+  }
+
+  var len =password.length;
+  if ((len<8)&&(len>0)){
+    alert("Password length should be at least 8");return false;
+  }
+  if (password!==password2){
+    alert("Password is not match");return false;
+  }
+  if (opassword==""){
+	alert("Original password must be entered"); return false;
+  }
+}
+
+
+
+</script>
+</head>
+
+<body>
+<table id="heading" width="100%" border="0">
+  <tr>
+    <th width="9%" height="108" rowspan="2" scope="col"><img src="img/gamehell.jpg" width="199" height="148" /></th>
+    <th onclick="self.location='userhome.html'" width="69%" rowspan="2" scope="col"><span class="style2">GAME HELL </span></th>
+    <th width="6%" height="63" scope="col">&nbsp;</th>
+    <th width="8%" scope="col"><span class="style7"><a href="person_info_menu.html" target="main"><p id=username>Username</p></a></span></th>
+    <th width="8%" scope="col"><button class="logout" style="width:auto; max-height:100%;" onclick="logout()">Log Out </button> </th>
+  </tr>
+ </table>
+
+
+<table width="100%" border="0">
+  <tr>
+	<form name="changeinfo" id="changeinfo" >
+	<label><b>Original Password </b></label>
+      <input type="password" placeholder="Enter original Password. You must enter this field" name="opsw" >
+      <label><b>Change Password </b></label>
+      <input type="password" placeholder="Enter New Password (only consist of alphabet letters or numbers and at least 8 characters)" name="psw" >
+    <label><b>Enter Password again</b></label>
+      <input type="password" placeholder="Enter Password again" name="psw2" >
+      <label><b>Change Phone Number</b></label>
+      <input type="text" placeholder="Enter Your New Phone Name" name="utel" >
+      <label><b>Change Email</b></label>
+      <input type="text" placeholder="Enter Your New Email" name="uemail" >
+      <button type="submit" class="button2" onclick="return validateForm()">Submit Changing</button>
+      <button type="button" onclick="self.location='userhome.html'" class="cancelbtn">Cancel</button>
+	 </form>
+  </tr>
+</table>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script>
+
+$("#changeinfo").submit(function(e) {
+	var data = $("#changeinfo").serialize()+'&user_id='+readCookie("user_id");
+    $.ajax({
+           type: "POST",
+           url: '/changeinfo',
+           data: data, // serializes the form's elements.
+		    //test
+        success: function(data){
+		if(data=='2')
+		alert('Wrong password, please enter again.');
+		else if(data=='1'){
+		alert('Information updated.');
+		window.location.href='/person_info_menu.html';
+		}
+		else
+		alert('server error');
+      },
+      error: function(jqXHR, textStatus, errorThrown){
+          alert('error'+jqXHR+'123'+textStatus+'123'+errorThrown);
+      }         
+      });
+
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+	
+});
+
+
+
+</script>
+<script>
+
+	window.onload = function() {
+		if (readCookie("user_name")==null){
+			top.location='home.html';
+		}
+		document.getElementById("username").innerHTML =readCookie("user_name");
+		document.getElementById("username").style.fontSize = "xx-large";
+		document.getElementById("username").style.color = "magenta";
+		var gameName=['persona5','dark soul','monster hunter'];
+	var gamelist = document.getElementById('gamelist');
+
+	gameName.forEach(function(item){
+		var option = document.createElement('option');
+		option.value = item;
+		gamelist.appendChild(option);
+	});
+}
+
+</script>
+
+
+</body>
+</html>
